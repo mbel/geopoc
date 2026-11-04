@@ -1,0 +1,201 @@
+{
+  "version": "v0",
+  "players": 100,
+  "timing": {
+    "questionWindowMs": 12000,
+    "revealMs": 2000,
+    "moveMs": 5000,
+    "zoneUpdateMs": 1000,
+    "finaleWindowMs": 8000,
+    "finaleCycleSec": 10
+  },
+  "bands": [
+    {
+      "maxMs": 3000,
+      "band": "GRAND",
+      "range": 6
+    },
+    {
+      "maxMs": 8000,
+      "band": "MOYEN",
+      "range": 3
+    },
+    {
+      "maxMs": 12000,
+      "band": "MICRO",
+      "range": 1
+    }
+  ],
+  "graph": {
+    "knn": 3,
+    "hubKnn": 4,
+    "isolationKm": 1200,
+    "isolatedHubLinks": 2,
+    "nearestHubLink": true,
+    "hubInterContinentLinks": false
+  },
+  "zone": {
+    "maxCenterOffsetKm": 4000,
+    "graceRounds": 1,
+    "finalCityWeighting": "rarity",
+    "rarityWeights": {
+      "c": 1,
+      "r": 0.4,
+      "l": 0.1
+    },
+    "maxRounds": 60,
+    "events": [
+      {
+        "announce": 5,
+        "apply": 6,
+        "safeFraction": 0.7
+      },
+      {
+        "announce": 8,
+        "apply": 9,
+        "safeFraction": 0.5
+      },
+      {
+        "announce": 11,
+        "apply": 12,
+        "safeFraction": 0.35
+      },
+      {
+        "announce": 14,
+        "apply": 15,
+        "safeFraction": 0.22
+      },
+      {
+        "announce": 17,
+        "apply": 18,
+        "safeFraction": 0.12
+      },
+      {
+        "announce": 20,
+        "apply": 21,
+        "safeFraction": 0.05
+      },
+      {
+        "announce": 23,
+        "apply": 24,
+        "safeCount": 3
+      },
+      {
+        "announce": 26,
+        "apply": 27,
+        "final": true
+      }
+    ]
+  },
+  "difficulty": {
+    "schedule": [
+      {
+        "from": 1,
+        "to": 5,
+        "mix": {
+          "1": 0.7,
+          "2": 0.3
+        }
+      },
+      {
+        "from": 6,
+        "to": 10,
+        "mix": {
+          "2": 0.5,
+          "3": 0.5
+        }
+      },
+      {
+        "from": 11,
+        "to": 15,
+        "mix": {
+          "3": 1
+        }
+      },
+      {
+        "from": 16,
+        "to": 20,
+        "mix": {
+          "3": 0.5,
+          "4": 0.5
+        }
+      },
+      {
+        "from": 21,
+        "to": 99,
+        "mix": {
+          "4": 0.7,
+          "5": 0.3
+        }
+      }
+    ],
+    "finale": {
+      "start": 5,
+      "max": 7,
+      "maxRounds": 10,
+      "maxAllFailStreak": 3
+    }
+  },
+  "bots": {
+    "skillSlope": 8,
+    "successTargets": {
+      "1": 0.92,
+      "2": 0.8,
+      "3": 0.65,
+      "4": 0.5,
+      "5": 0.35,
+      "6": 0.25,
+      "7": 0.18
+    },
+    "timing": {
+      "baseMs": {
+        "1": 3000,
+        "2": 4200,
+        "3": 5400,
+        "4": 6600,
+        "5": 7800,
+        "6": 8600,
+        "7": 9200
+      },
+      "sigma": 0.5,
+      "skillEffect": 0.7
+    },
+    "navNoiseKm": 600,
+    "profiles": {
+      "lazy": 0.2,
+      "standard": 0.5,
+      "eager": 0.25,
+      "random": 0.05
+    }
+  },
+  "targets": {
+    "durationMinutes": [
+      8,
+      10
+    ],
+    "aliveAtRound": {
+      "5": 100,
+      "10": 80,
+      "15": 55,
+      "20": 30,
+      "25": 12
+    },
+    "aliveTolerance": 8,
+    "finaleEntrants": [
+      2,
+      8
+    ],
+    "finaleRounds": [
+      1,
+      6
+    ],
+    "continentTolerance": 0.25,
+    "maxShareOver12Min": 0.02,
+    "successTolerance": 0.03
+  },
+  "graphConstraints": {
+    "maxDiameter": 8,
+    "minReachRatio": 0.6,
+    "reachHops": 3
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "balanceVersion": "v1",
+  "games": 1000,
+  "seed": 42,
+  "duration": {
+    "medianMin": 9.5,
+    "meanMin": 9.522666666666678,
+    "p5Min": 9.166666666666666,
+    "p95Min": 10.166666666666666,
+    "shareOver12Min": 0
+  },
+  "aliveAtRound": {
+    "5": 100,
+    "10": 80.766,
+    "15": 53.168,
+    "20": 36.742,
+    "25": 13.886
+  },
+  "finale": {
+    "reachedShare": 0.954,
+    "entrantsMedian": 7,
+    "entrantsMean": 8.4916142557652,
+    "roundsMedian": 3,
+    "roundsP95": 7
+  },
+  "endReasons": {
+    "last_survivor": 980,
+    "tiebreak": 20
+  },
+  "eliminationsPerGame": {
+    "zone": 91.853,
+    "finale": 7.126,
+    "cap": 0.021
+  },
+  "continents": [
+    {
+      "continent": "AF",
+      "spawns": 15940,
+      "wins": 164,
+      "winRate": 0.010288582183186951,
+      "ratio": 1.0288582183186952
+    },
+    {
+      "continent": "AS",
+      "spawns": 23869,
+      "wins": 240,
+      "winRate": 0.010054882902509532,
+      "ratio": 1.0054882902509532
+    },
+    {
+      "continent": "EU",
+      "spawns": 22275,
+      "wins": 260,
+      "winRate": 0.011672278338945005,
+      "ratio": 1.1672278338945006
+    },
+    {
+      "continent": "NA",
+      "spawns": 15492,
+      "wins": 136,
+      "winRate": 0.008778724502969274,
+      "ratio": 0.8778724502969274
+    },
+    {
+      "continent": "OC",
+      "spawns": 12490,
+      "wins": 108,
+      "winRate": 0.008646917534027222,
+      "ratio": 0.8646917534027222
+    },
+    {
+      "continent": "SA",
+      "spawns": 9934,
+      "wins": 92,
+      "winRate": 0.009261123414535936,
+      "ratio": 0.9261123414535937
+    }
+  ],
+  "observedSuccess": {
+    "1": {
+      "attempts": 352500,
+      "rate": 0.916113475177305
+    },
+    "2": {
+      "attempts": 331257,
+      "rate": 0.7896346341360333
+    },
+    "3": {
+      "attempts": 442590,
+      "rate": 0.6386791387062518
+    },
+    "4": {
+      "attempts": 282868,
+      "rate": 0.5226607463551904
+    },
+    "5": {
+      "attempts": 222171,
+      "rate": 0.42929995363931384
+    },
+    "6": {
+      "attempts": 66680,
+      "rate": 0.3466106778644271
+    },
+    "7": {
+      "attempts": 309,
+      "rate": 0.3592233009708738
+    }
+  },
+  "bands": {
+    "GRAND": 0.19012148231234643,
+    "MOYEN": 0.40358054381870806,
+    "MICRO": 0.07560384693989097,
+    "FAIL": 0.33069412692905453
+  },
+  "topFinaleCities": [
+    {
+      "name": "Antananarivo",
+      "share": 0.017
+    },
+    {
+      "name": "Abidjan",
+      "share": 0.016
+    },
+    {
+      "name": "Hong Kong",
+      "share": 0.014
+    },
+    {
+      "name": "Sydney",
+      "share": 0.014
+    },
+    {
+      "name": "Hanoi",
+      "share": 0.013
+    }
+  ],
+  "checks": [
+    {
+      "name": "Durée médiane (min)",
+      "value": "9.5",
+      "target": "8-10",
+      "pass": true
+    },
+    {
+      "name": "Joueurs en vie fin du round 5",
+      "value": "100.0",
+      "target": "100 ± 8",
+      "pass": true
+    },
+    {
+      "name": "Joueurs en vie fin du round 10",
+      "value": "80.8",
+      "target": "80 ± 8",
+      "pass": true
+    },
+    {
+      "name": "Joueurs en vie fin du round 15",
+      "value": "53.2",
+      "target": "55 ± 8",
+      "pass": true
+    },
+    {
+      "name": "Joueurs en vie fin du round 20",
+      "value": "36.7",
+      "target": "30 ± 8",
+      "pass": true
+    },
+    {
+      "name": "Joueurs en vie fin du round 25",
+      "value": "13.9",
+      "target": "12 ± 8",
+      "pass": true
+    },
+    {
+      "name": "Survivants à l'entrée de la finale (médiane)",
+      "value": "7.0",
+      "target": "2-8",
+      "pass": true
+    },
+    {
+      "name": "Rounds de finale (médiane)",
+      "value": "3.0",
+      "target": "1-6",
+      "pass": true
+    },
+    {
+      "name": "Équité de spawn : pire écart continent",
+      "value": "EU +17 %",
+      "target": "± 25 %",
+      "pass": true
+    },
+    {
+      "name": "Parties de plus de 12 min",
+      "value": "0.0 %",
+      "target": "< 2 %",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

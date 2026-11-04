@@ -1,0 +1,29 @@
+{
+  "name": "geoclash-royale",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "GeoClash Royale — monorepo : moteur, runtime de partie, simulateur, serveur, application web/mobile",
+  "engines": { "node": ">=20" },
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "graph:build": "npm run graph:build -w @geoclash/sim",
+    "graph:validate": "npm run graph:validate -w @geoclash/sim",
+    "sim": "npm run sim -w @geoclash/sim --",
+    "sim:check": "npm run sim:check -w @geoclash/sim",
+    "dev": "npm run dev -w @geoclash/web",
+    "dev:server": "npm run dev -w @geoclash/server",
+    "build": "npm run build -w @geoclash/web",
+    "ci": "npm run typecheck && npm run graph:validate && npm test && npm run sim:check && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "jsdom": "^25.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

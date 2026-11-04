@@ -1,0 +1,8 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Tests", "type": "npm", "script": "test", "group": "test" },
+    { "label": "Simulation (contrôle des cibles)", "type": "npm", "script": "sim:check" },
+    { "label": "CI complète", "type": "npm", "script": "ci" }
+  ]
+}

@@ -1,0 +1,110 @@
+import type { Rng } from "@geoclash/engine";
+import { distract, fromRows, type Gen, type Row } from "./lib";
+
+type Film = [film: string, director: string, difficulty: number];
+const FILMS: Film[] = [
+  ["Titanic", "James Cameron", 2], ["Avatar", "James Cameron", 2], ["Jurassic Park", "Steven Spielberg", 2], ["E.T. l'extra-terrestre", "Steven Spielberg", 2],
+  ["Les Aventuriers de l'arche perdue", "Steven Spielberg", 2], ["Les Dents de la mer", "Steven Spielberg", 3], ["La Liste de Schindler", "Steven Spielberg", 3],
+  ["Pulp Fiction", "Quentin Tarantino", 3], ["Inglourious Basterds", "Quentin Tarantino", 4], ["Le Parrain", "Francis Ford Coppola", 3], ["Apocalypse Now", "Francis Ford Coppola", 4],
+  ["Taxi Driver", "Martin Scorsese", 4], ["Les Affranchis", "Martin Scorsese", 5], ["Psychose", "Alfred Hitchcock", 3], ["Les Oiseaux", "Alfred Hitchcock", 3],
+  ["Sueurs froides", "Alfred Hitchcock", 4], ["2001, l'Odyssée de l'espace", "Stanley Kubrick", 4], ["Shining", "Stanley Kubrick", 3], ["Orange mécanique", "Stanley Kubrick", 4],
+  ["Blade Runner", "Ridley Scott", 4], ["Alien, le huitième passager", "Ridley Scott", 3], ["Gladiator", "Ridley Scott", 2], ["Inception", "Christopher Nolan", 2],
+  ["Interstellar", "Christopher Nolan", 2], ["The Dark Knight", "Christopher Nolan", 2], ["Oppenheimer", "Christopher Nolan", 2], ["Le Voyage de Chihiro", "Hayao Miyazaki", 2],
+  ["Mon voisin Totoro", "Hayao Miyazaki", 3], ["Princesse Mononoké", "Hayao Miyazaki", 3], ["Le Fabuleux Destin d'Amélie Poulain", "Jean-Pierre Jeunet", 2],
+  ["Intouchables", "Olivier Nakache et Éric Toledano", 2], ["La Haine", "Mathieu Kassovitz", 3], ["Le Grand Bleu", "Luc Besson", 3], ["Léon", "Luc Besson", 3],
+  ["À bout de souffle", "Jean-Luc Godard", 4], ["Les 400 Coups", "François Truffaut", 4], ["La Grande Illusion", "Jean Renoir", 5], ["La vie est belle", "Roberto Benigni", 4],
+  ["La Dolce Vita", "Federico Fellini", 4], ["Le Bon, la Brute et le Truand", "Sergio Leone", 4], ["Parasite", "Bong Joon-ho", 3], ["Forrest Gump", "Robert Zemeckis", 3],
+  ["Retour vers le futur", "Robert Zemeckis", 2], ["Fight Club", "David Fincher", 3], ["Matrix", "Les Wachowski", 3], ["Toy Story", "John Lasseter", 4], ["Ratatouille", "Brad Bird", 5],
+  ["La La Land", "Damien Chazelle", 3], ["Whiplash", "Damien Chazelle", 4], ["Joker (2019)", "Todd Phillips", 3], ["Barbie (2023)", "Greta Gerwig", 3],
+  ["Casablanca", "Michael Curtiz", 5], ["Autant en emporte le vent", "Victor Fleming", 5], ["Citizen Kane", "Orson Welles", 5], ["Les Temps modernes", "Charlie Chaplin", 4],
+  ["Metropolis", "Fritz Lang", 5], ["Le Pianiste", "Roman Polanski", 4], ["Amadeus", "Miloš Forman", 5],
+];
+
+const ROWS: Row[] = [
+  // Acteurs
+  ["culture_pop", 1, "Quel acteur incarne Jack Sparrow dans « Pirates des Caraïbes » ?", "Johnny Depp", "Orlando Bloom", "Brad Pitt", "Geoffrey Rush"],
+  ["culture_pop", 1, "Quel acteur incarne Iron Man dans l'univers cinématographique Marvel ?", "Robert Downey Jr.", "Chris Evans", "Chris Hemsworth", "Mark Ruffalo"],
+  ["culture_pop", 1, "Quel acteur joue Jack dans « Titanic » ?", "Leonardo DiCaprio", "Brad Pitt", "Tom Cruise", "Matt Damon"],
+  ["culture_pop", 1, "Quelle actrice joue Hermione Granger dans les films Harry Potter ?", "Emma Watson", "Emma Stone", "Keira Knightley", "Natalie Portman"],
+  ["culture_pop", 2, "Quel acteur joue Forrest Gump ?", "Tom Hanks", "Kevin Costner", "Bill Murray", "Tom Cruise"],
+  ["culture_pop", 2, "Quel acteur joue Neo dans « Matrix » ?", "Keanu Reeves", "Brad Pitt", "Tom Cruise", "Johnny Depp"],
+  ["culture_pop", 2, "Quel acteur joue Rocky Balboa ?", "Sylvester Stallone", "Arnold Schwarzenegger", "Bruce Willis", "Jean-Claude Van Damme"],
+  ["culture_pop", 2, "Quel acteur joue OSS 117 dans les films de Michel Hazanavicius ?", "Jean Dujardin", "Gilles Lellouche", "Guillaume Canet", "Omar Sy"],
+  ["culture_pop", 2, "Quel acteur joue Driss dans « Intouchables » ?", "Omar Sy", "Jamel Debbouze", "Roschdy Zem", "Kad Merad"],
+  ["culture_pop", 2, "Quel acteur incarne Thor dans l'univers Marvel ?", "Chris Hemsworth", "Chris Evans", "Chris Pratt", "Chris Pine"],
+  ["culture_pop", 3, "Quel acteur joue le Joker dans « The Dark Knight » (2008) ?", "Heath Ledger", "Joaquin Phoenix", "Jack Nicholson", "Jared Leto"],
+  ["culture_pop", 3, "Quel acteur joue Maximus dans « Gladiator » ?", "Russell Crowe", "Mel Gibson", "Brad Pitt", "Gerard Butler"],
+  ["culture_pop", 3, "Quel acteur français joue Obélix dans « Astérix et Obélix contre César » (1999) ?", "Gérard Depardieu", "Jean Reno", "Christian Clavier", "Jean-Paul Belmondo"],
+  ["culture_pop", 3, "Quelle actrice joue Katniss Everdeen dans « Hunger Games » ?", "Jennifer Lawrence", "Emma Stone", "Shailene Woodley", "Kristen Stewart"],
+  // Séries
+  ["culture_pop", 1, "Dans quelle série apparaît le Trône de fer ?", "Game of Thrones", "Vikings", "The Witcher", "Rome"],
+  ["culture_pop", 1, "Quelle série met en scène six amis new-yorkais dont Rachel et Ross ?", "Friends", "How I Met Your Mother", "Seinfeld", "Les Experts"],
+  ["culture_pop", 1, "Quelle famille jaune vit à Springfield ?", "Les Simpson", "Les Griffin", "South Park", "Futurama"],
+  ["culture_pop", 2, "Dans quelle série apparaît le personnage d'Eleven ?", "Stranger Things", "Dark", "Black Mirror", "Riverdale"],
+  ["culture_pop", 2, "Dans quelle série suit-on le professeur de chimie Walter White ?", "Breaking Bad", "Les Soprano", "Dexter", "Lost"],
+  ["culture_pop", 2, "Quelle série met en scène Sheldon Cooper ?", "The Big Bang Theory", "Friends", "How I Met Your Mother", "Modern Family"],
+  ["culture_pop", 3, "Quelle série française sortie sur Netflix en 2021 suit un gentleman cambrioleur incarné par Omar Sy ?", "Lupin", "Le Bureau des légendes", "Dix pour cent", "Baron noir"],
+  ["culture_pop", 3, "Quelle série suit le mafieux Tony Soprano ?", "Les Soprano", "Boardwalk Empire", "Peaky Blinders", "Narcos"],
+  ["culture_pop", 3, "Dans quelle série le héros voyage-t-il à bord du TARDIS ?", "Doctor Who", "Star Trek", "Black Mirror", "Torchwood"],
+  ["culture_pop", 4, "Dans quelle série suit-on le publicitaire new-yorkais Don Draper ?", "Mad Men", "Suits", "The Newsroom", "Billions"],
+  // Musique
+  ["culture_pop", 1, "Quel groupe a chanté « Bohemian Rhapsody » ?", "Queen", "Led Zeppelin", "The Rolling Stones", "Pink Floyd"],
+  ["culture_pop", 1, "Quel groupe britannique réunit John Lennon, Paul McCartney, George Harrison et Ringo Starr ?", "Les Beatles", "Les Rolling Stones", "Oasis", "Queen"],
+  ["culture_pop", 1, "Quel chanteur est surnommé « le Roi du rock'n'roll » ?", "Elvis Presley", "Chuck Berry", "Little Richard", "Johnny Cash"],
+  ["culture_pop", 1, "Quel chanteur est surnommé « le Roi de la pop » ?", "Michael Jackson", "Prince", "Justin Timberlake", "George Michael"],
+  ["culture_pop", 1, "Quelle chanteuse canadienne a interprété « My Heart Will Go On » ?", "Céline Dion", "Shania Twain", "Avril Lavigne", "Alanis Morissette"],
+  ["culture_pop", 2, "Quel groupe suédois a chanté « Dancing Queen » ?", "ABBA", "Roxette", "Europe", "Ace of Base"],
+  ["culture_pop", 2, "Quel groupe irlandais a pour chanteur Bono ?", "U2", "The Cranberries", "The Pogues", "Thin Lizzy"],
+  ["culture_pop", 2, "Quel duo français de musique électronique se produit avec des casques de robots ?", "Daft Punk", "Justice", "Air", "Cassius"],
+  ["culture_pop", 2, "Quelle chanteuse française est surnommée « la Môme » ?", "Édith Piaf", "Dalida", "Barbara", "Mireille Mathieu"],
+  ["culture_pop", 2, "Qui a chanté « La Vie en rose » ?", "Édith Piaf", "Dalida", "Juliette Gréco", "Joséphine Baker"],
+  ["culture_pop", 2, "Quel groupe a pour chanteur Mick Jagger ?", "The Rolling Stones", "The Who", "The Kinks", "The Doors"],
+  ["culture_pop", 2, "Quel chanteur a écrit « Imagine » ?", "John Lennon", "Paul McCartney", "Bob Dylan", "Elton John"],
+  ["culture_pop", 3, "Quel album de Michael Jackson est le plus vendu de l'histoire ?", "Thriller", "Bad", "Dangerous", "Off the Wall"],
+  ["culture_pop", 3, "Qui a chanté « Aux Champs-Élysées » ?", "Joe Dassin", "Charles Aznavour", "Michel Sardou", "Claude François"],
+  ["culture_pop", 3, "Quel chanteur belge a interprété « Ne me quitte pas » ?", "Jacques Brel", "Stromae", "Salvatore Adamo", "Georges Moustaki"],
+  ["culture_pop", 3, "Quelle chanteuse a sorti l'album « 21 » ?", "Adele", "Amy Winehouse", "Lady Gaga", "Rihanna"],
+  ["culture_pop", 3, "Quel compositeur a écrit la musique de « Star Wars » ?", "John Williams", "Hans Zimmer", "Ennio Morricone", "Howard Shore"],
+  ["culture_pop", 4, "Quel groupe a sorti l'album « The Dark Side of the Moon » ?", "Pink Floyd", "Led Zeppelin", "Deep Purple", "The Who"],
+  ["culture_pop", 4, "Quel groupe a sorti l'album « Nevermind » ?", "Nirvana", "Pearl Jam", "Soundgarden", "Metallica"],
+  ["culture_pop", 4, "Quel compositeur est associé aux musiques d'« Inception » et d'« Interstellar » ?", "Hans Zimmer", "John Williams", "Alexandre Desplat", "Howard Shore"],
+  ["culture_pop", 4, "Quel chanteur américain est surnommé « The Boss » ?", "Bruce Springsteen", "Bob Dylan", "Billy Joel", "Neil Young"],
+  ["culture_pop", 5, "Quel compositeur a écrit la musique de « Titanic » ?", "James Horner", "John Williams", "Hans Zimmer", "Danny Elfman"],
+  ["culture_pop", 6, "Quel compositeur a écrit la musique des films du « Seigneur des anneaux » ?", "Howard Shore", "John Williams", "Hans Zimmer", "James Horner"],
+  // Jeux vidéo
+  ["culture_pop", 1, "Quel plombier est la mascotte de Nintendo ?", "Mario", "Luigi", "Wario", "Link"],
+  ["culture_pop", 1, "Quel hérisson bleu est la mascotte de Sega ?", "Sonic", "Knuckles", "Tails", "Shadow"],
+  ["culture_pop", 1, "Quel jeu de construction en blocs a été créé par Markus Persson ?", "Minecraft", "Roblox", "Terraria", "Lego Worlds"],
+  ["culture_pop", 1, "Dans quelle série de jeux et de dessins animés trouve-t-on Pikachu ?", "Pokémon", "Digimon", "Yu-Gi-Oh!", "Dragon Ball"],
+  ["culture_pop", 2, "Quel jeu de blocs qui tombent a été créé par Alexeï Pajitnov ?", "Tetris", "Pac-Man", "Space Invaders", "Pong"],
+  ["culture_pop", 2, "Dans quelle série de jeux incarne-t-on Link ?", "The Legend of Zelda", "Final Fantasy", "Metroid", "Kirby"],
+  ["culture_pop", 3, "Quel jeu de combat met en scène Ryu et Ken ?", "Street Fighter", "Mortal Kombat", "Tekken", "Soulcalibur"],
+  ["culture_pop", 3, "Dans quelle série de jeux incarne-t-on le Master Chief ?", "Halo", "Gears of War", "Destiny", "Call of Duty"],
+  ["culture_pop", 3, "Quel créateur japonais est à l'origine de Mario et de Zelda ?", "Shigeru Miyamoto", "Hideo Kojima", "Satoru Iwata", "Hironobu Sakaguchi"],
+  ["culture_pop", 3, "Quelle société française a développé la série « Assassin's Creed » ?", "Ubisoft", "Electronic Arts", "Activision", "Capcom"],
+  ["culture_pop", 4, "Quelle société a créé Pac-Man ?", "Namco", "Atari", "Sega", "Nintendo"],
+  // BD, mangas, jeunesse
+  ["culture_pop", 1, "Qui a créé Tintin ?", "Hergé", "Goscinny", "Morris", "Peyo"],
+  ["culture_pop", 1, "Comment s'appelle le chien de Tintin ?", "Milou", "Idéfix", "Rantanplan", "Snoopy"],
+  ["culture_pop", 1, "Quel petit Gaulois est le héros d'une célèbre bande dessinée, avec son ami Obélix ?", "Astérix", "Lucky Luke", "Spirou", "Gaston"],
+  ["culture_pop", 1, "Quel super-héros est l'alter ego de Peter Parker ?", "Spider-Man", "Batman", "Superman", "Daredevil"],
+  ["culture_pop", 1, "Quel super-héros est l'alter ego de Bruce Wayne ?", "Batman", "Superman", "Iron Man", "Green Arrow"],
+  ["culture_pop", 1, "Dans quelle maison de Poudlard Harry Potter est-il réparti ?", "Gryffondor", "Serpentard", "Poufsouffle", "Serdaigle"],
+  ["culture_pop", 1, "Quel studio a produit « Toy Story » ?", "Pixar", "DreamWorks", "Illumination", "Studio Ghibli"],
+  ["culture_pop", 1, "Dans quel film d'animation un poisson-clown nommé Marin cherche-t-il son fils ?", "Le Monde de Nemo", "Gang de requins", "La Petite Sirène", "Ratatouille"],
+  ["culture_pop", 2, "Quel manga suit Luffy et son équipage de pirates ?", "One Piece", "Naruto", "Bleach", "Dragon Ball"],
+  ["culture_pop", 2, "Comment s'appelle le directeur de Poudlard dans les premiers livres ?", "Albus Dumbledore", "Severus Rogue", "Minerva McGonagall", "Rubeus Hagrid"],
+  ["culture_pop", 3, "Quel mangaka a créé Dragon Ball ?", "Akira Toriyama", "Eiichirō Oda", "Masashi Kishimoto", "Osamu Tezuka"],
+  ["culture_pop", 3, "Quel dessinateur a créé Lucky Luke ?", "Morris", "Hergé", "Peyo", "André Franquin"],
+  ["culture_pop", 3, "Dans quelle gare londonienne se trouve la voie 9¾ ?", "King's Cross", "Victoria", "Waterloo", "Paddington"],
+  ["culture_pop", 3, "Quel est le premier long-métrage d'animation de Disney, sorti en 1937 ?", "Blanche-Neige et les Sept Nains", "Cendrillon", "Pinocchio", "Bambi"],
+  ["culture_pop", 5, "Quel mangaka surnommé le « dieu du manga » a créé Astro Boy ?", "Osamu Tezuka", "Akira Toriyama", "Hayao Miyazaki", "Rumiko Takahashi"],
+];
+
+export function generatePop(rng: Rng): Gen[] {
+  const directors = [...new Set(FILMS.map((f) => f[1]))];
+  const out: Gen[] = FILMS.map(([film, dir, d]) => ({
+    category: "culture_pop", difficulty: d, question: `Qui a réalisé le film « ${film} » ?`, correct: dir, wrong: distract(rng, directors, dir),
+  }));
+  return [...out, ...fromRows(ROWS)];
+}

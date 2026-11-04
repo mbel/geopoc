@@ -1,0 +1,14 @@
+{
+  "name": "@geoclash/sim",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "graph:build": "tsx src/scripts/buildGraph.ts",
+    "graph:validate": "tsx src/scripts/validateGraph.ts",
+    "sim": "tsx src/cli.ts",
+    "sim:check": "tsx src/cli.ts --games 1000 --seed 42 --check"
+  },
+  "dependencies": { "@geoclash/engine": "*", "@geoclash/data": "*", "@geoclash/runtime": "*" }
+}

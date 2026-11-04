@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Déboguer le simulateur (200 parties)",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["--import", "tsx"],
+      "program": "${workspaceFolder}/src/sim/cli.ts",
+      "args": ["--games", "200", "--seed", "42", "--out", "reports/tmp"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
