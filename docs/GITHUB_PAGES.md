@@ -49,3 +49,4 @@ Si vous avez déployé un serveur de jeu WebSocket (sur Fly.io, Hetzner, VPS, et
 2. Créez une variable de dépôt nommée `GEOCLASH_SERVER_URL` avec votre URL WebSocket sécurisée (ex: `wss://ws.votredomaine.com`).
 3. Relancez le workflow GitHub Pages (ou poussez un commit).
 4. Le bouton « Jouer en ligne » deviendra alors actif pour tous les visiteurs du site.
+
