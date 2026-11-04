@@ -80,15 +80,19 @@ Détails : `docs/ARCHITECTURE.md`. Principe : **une seule logique de partie**, e
 4. La zone rouge rétrécit vers une **Ville Finale** cachée ; la prochaine zone est annoncée un round avant. Hors zone = éliminé.
 5. Finale : seuls ceux arrivés sur la Ville Finale restent ; chaque erreur élimine. Le gagnant remporte le **badge de la Ville Finale** (passeport).
 
-## 5. Tester sur Android sans serveur
+## 5. Jouer en ligne sur le Web (GitHub Pages)
+
+L'application web est déployable directement sur **GitHub Pages** via GitHub Actions (workflow `.github/workflows/deploy-pages.yml`). Le jeu en solo fonctionne immédiatement à 100% dans le navigateur de n'importe quel joueur sans serveur. Voir le guide dans [`docs/GITHUB_PAGES.md`](docs/GITHUB_PAGES.md).
+
+## 6. Tester sur Android sans serveur
 
 Un workflow GitHub Actions construit un **APK de test** (mode solo) : voir `docs/ANDROID.md`. Pour la mise en ligne du serveur multijoueur : `docs/DEPLOYMENT.md`.
 
-## 6. Publier sur les stores
+## 7. Publier sur les stores
 
 Voir `docs/STORE_READINESS.md` (liste de contrôle). En bref : choisir le nom et l'identifiant d'application (`apps/web/src/brand.ts`), puis `npm run build`, `cd apps/web && npm run cap:add:ios` / `cap:add:android` (Xcode / Android Studio requis), `npm run cap:sync`.
 
-## 7. Limites connues (à lire)
+## 8. Limites connues (à lire)
 
 - **Non testé sur appareils réels** : l'interface (carte tactile, pincement, tailles d'écran) n'a été vérifiée qu'en tests automatiques (jsdom) et en build ; aucune vérification visuelle n'a été faite.
 - **Questions** : 1 291 questions en brouillon, **non vérifiées** (voir `docs/QUESTIONS.md`) : à faire relire avant toute publication.

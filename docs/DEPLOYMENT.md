@@ -6,7 +6,7 @@
 
 | Pièce | Nature | Hébergement typique |
 |---|---|---|
-| **Application web** (PWA) | fichiers statiques | CDN / hébergeur statique (Cloudflare Pages, Netlify, Vercel…) — gratuit ou quasi |
+| **Application web** (PWA) | fichiers statiques | CDN / hébergeur statique (GitHub Pages, Cloudflare Pages, Netlify, Vercel…) — gratuit ou quasi |
 | **Serveur de jeu** (mode en ligne) | **processus Node permanent**, connexions WebSocket, parties en mémoire | une machine/conteneur toujours allumé |
 | Apps iOS / Android | binaires envoyés aux stores | pas d'hébergement ; elles embarquent l'app web et appellent le serveur en `wss://` |
 | *(plus tard)* base de données, comptes | Postgres managé | Supabase, Neon, etc. |
@@ -26,7 +26,7 @@ Notre serveur garde les parties **en mémoire** et tient des **WebSocket longues
 | **Gros cloud** | AWS, GCP, Azure | Tout existe (scalabilité, managé) | Complexité et coût disproportionnés au démarrage | À éviter au début |
 
 ### Ma recommandation pour démarrer
-1. **Web statique** : Cloudflare Pages (ou Netlify) — gratuit.
+1. **Web statique** : GitHub Pages (déjà configuré, voir `docs/GITHUB_PAGES.md`) ou Cloudflare Pages / Netlify — gratuit.
 2. **Serveur de jeu** : **une seule petite instance en Europe** (Paris, Francfort ou Londres, vos joueurs étant FR/UK).
    - *Préférez un PaaS (Fly.io ou Render)* si vous voulez limiter l'administration : vous donnez un Dockerfile, ils gèrent TLS et redémarrages.
    - *Préférez un VPS (Hetzner/OVH)* si vous voulez le coût le plus bas et acceptez ~1 h de mise en place (Docker + Caddy pour `wss`).
@@ -77,7 +77,7 @@ Les apps iOS/Android appellent la même URL `wss://`. **`wss` (TLS) est obligato
 
 ## 9. Feuille de route de mise en ligne
 
-0. **Maintenant, sans serveur** : APK de test solo (`docs/ANDROID.md`) + site statique pour tester dans un navigateur.
+0. **Maintenant, sans serveur** : APK de test solo (`docs/ANDROID.md`) + site statique sur GitHub Pages pour tester dans un navigateur (`docs/GITHUB_PAGES.md`).
 1. **Serveur de test** : 1 petite instance + domaine + `wss` ; tests entre quelques personnes (lobby, bots sur les places libres).
 2. **Identité invité + reconnexion**, Dockerfile, vérification d'`Origin`, déploiement automatisé.
 3. **Test de charge**, supervision, alertes ; bêta fermée (TestFlight / test fermé Android).

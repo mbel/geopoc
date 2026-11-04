@@ -1,0 +1,68 @@
+name: Déploiement GitHub Pages
+
+# Déploie l'application web (PWA statique) sur GitHub Pages.
+# Déclenchement automatique à chaque push sur la branche main ou manuellement via l'onglet « Actions ».
+#
+# Configuration requise sur GitHub (une seule fois) :
+# Dépôt → Paramètres (Settings) → Pages → Source : choisir « GitHub Actions ».
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+# Permissions nécessaires pour déployer sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois pour éviter les conflits d'état
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Récupérer le code source
+        uses: actions/checkout@v4
+
+      - name: Configurer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Construire l'application web
+        run: npm run build -w @geoclash/web
+        env:
+          # Optionnel : URL du serveur WebSocket (variable de dépôt GEOCLASH_SERVER_URL).
+          # Si vide, seul le mode solo fonctionne dans le navigateur.
+          VITE_SERVER_URL: ${{ vars.GEOCLASH_SERVER_URL }}
+
+      - name: Préparer les fichiers pour GitHub Pages
+        run: |
+          # Empêche Jekyll d'ignorer certains fichiers ou répertoires
+          touch apps/web/dist/.nojekyll
+          # Assure le bon comportement en cas d'accès direct / refresh
+          cp apps/web/dist/index.html apps/web/dist/404.html
+
+      - name: Configurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Téléverser l'artefact Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/dist
+
+      - name: Déployer sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
