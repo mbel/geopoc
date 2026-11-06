@@ -1,10 +1,11 @@
-import { getBalance, getWorld, questionsFr } from "@geoclash/data";
+import { getBalance, getWorld, questionsEn, questionsFr } from "@geoclash/data";
 import { Rng, haversine } from "@geoclash/engine";
 import { MatchRunner, parseQuestions, type PlayerView, type RunnerOptions } from "../src";
 
 export const balance = getBalance();
 export const world = getWorld(balance);
 export const questions = parseQuestions(questionsFr);
+export const questionsEnglish = parseQuestions(questionsEn);
 
 export function makeRunner(over: Partial<RunnerOptions> = {}, startAt = 0) {
   return new MatchRunner({
