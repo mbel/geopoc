@@ -100,7 +100,12 @@ export interface LobbyInfo {
 
 // ---- Messages réseau ----
 export const ClientMessageSchema = z.discriminatedUnion("t", [
-  z.object({ t: z.literal("join"), name: z.string().min(1).max(24), mode: z.enum(["solo", "online"]) }),
+  z.object({
+    t: z.literal("join"),
+    name: z.string().min(1).max(24),
+    mode: z.enum(["solo", "online"]),
+    lang: z.enum(["fr", "en"]).optional(),
+  }),
   z.object({ t: z.literal("answer"), index: z.number().int().min(0).max(3) }),
   z.object({ t: z.literal("move"), cityId: z.number().int().min(0).nullable() }),
   z.object({ t: z.literal("ping"), ts: z.number(), rtt: z.number().min(0).max(10000).optional() }),

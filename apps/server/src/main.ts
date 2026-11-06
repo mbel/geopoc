@@ -1,4 +1,4 @@
-import { getBalance, getWorld, questionsFr } from "@geoclash/data";
+import { getBalance, getWorld, questionsEn, questionsFr } from "@geoclash/data";
 import { parseQuestions, scaleBalanceTiming } from "@geoclash/runtime";
 import { GameServer } from "./server";
 
@@ -11,6 +11,7 @@ const server = new GameServer({
   world: getWorld(balance),
   balance,
   questions: parseQuestions(questionsFr),
+  questionsEn: parseQuestions(questionsEn),
   lobbyWaitMs: Number(process.env.LOBBY_WAIT_MS ?? 20_000),
   log: (m) => console.log(`[serveur] ${m}`),
 });

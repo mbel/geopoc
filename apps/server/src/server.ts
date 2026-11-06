@@ -17,6 +17,7 @@ export interface ServerOptions {
   world: World;
   balance: Balance;
   questions: Question[];
+  questionsEn?: Question[];
   /** Délai d'attente du lobby en ligne avant que les bots prennent les places libres. */
   lobbyWaitMs?: number;
   tickMs?: number;
@@ -30,6 +31,7 @@ interface Client {
   ws: WebSocket;
   name: string | null;
   mode: "solo" | "online" | null;
+  lang: "fr" | "en";
   match: ActiveMatch | null;
   playerId: number;
   /** Demi-RTT mesuré (ms), borné : sert à compenser la latence sur les temps de réponse. */
@@ -111,7 +113,7 @@ export class GameServer {
       ws.close(1013, "serveur plein");
       return;
     }
-    const c: Client = { ws, name: null, mode: null, match: null, playerId: -1, halfRttMs: 0, msgWindowStart: 0, msgCount: 0 };
+    const c: Client = { ws, name: null, mode: null, lang: "fr", match: null, playerId: -1, halfRttMs: 0, msgWindowStart: 0, msgCount: 0 };
     this.clients.add(c);
     this.send(c, { t: "hello", protocol: PROTOCOL_VERSION, serverNow: this.now() });
     ws.on("message", (data) => this.onMessage(c, data.toString()));
@@ -146,7 +148,7 @@ export class GameServer {
         if (m.rtt !== undefined) c.halfRttMs = Math.min(400, m.rtt / 2);
         return this.send(c, { t: "pong", ts: m.ts, serverNow: now });
       case "join":
-        return this.join(c, m.name, m.mode);
+        return this.join(c, m.name, m.mode, m.lang ?? "fr");
       case "answer":
         if (c.match) c.match.runner.answer(c.playerId, m.index, now, c.halfRttMs);
         return;
@@ -161,11 +163,12 @@ export class GameServer {
   }
 
   // ---------- lobby ----------
-  private join(c: Client, rawName: string, mode: "solo" | "online"): void {
+  private join(c: Client, rawName: string, mode: "solo" | "online", lang: "fr" | "en" = "fr"): void {
     if (c.mode) return this.send(c, { t: "error", code: "already_joined", message: "déjà dans une partie" });
     // eslint-disable-next-line no-control-regex
     c.name = rawName.replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 24) || "Joueur";
     c.mode = mode;
+    c.lang = lang;
     if (mode === "solo") return this.startMatch([c]);
     this.waiting.push(c);
     if (this.lobbyStartsAt === null) this.lobbyStartsAt = this.now() + (this.opts.lobbyWaitMs ?? 20_000);
@@ -210,10 +213,13 @@ export class GameServer {
     const now = this.now();
     const id = `m${++this.matchCounter}_${randomInt(0, 0xffffff).toString(36)}`;
     const seed = randomInt(1, 0x7fffffff);
+    const questions = group.some((c) => c.lang === "en") && this.opts.questionsEn
+      ? this.opts.questionsEn
+      : this.opts.questions;
     const runner = new MatchRunner({
       world: this.opts.world,
       balance: this.opts.balance,
-      questions: this.opts.questions,
+      questions,
       seed,
       startAt: now,
       matchId: id,

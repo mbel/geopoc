@@ -4,6 +4,7 @@ export interface RemoteSessionOptions {
   url: string;
   name: string;
   mode?: "solo" | "online";
+  lang?: "fr" | "en";
   /** Constructeur WebSocket (navigateur ou Node ≥ 22 par défaut ; injectable pour les tests). */
   WebSocketImpl?: new (url: string) => WebSocketLike;
 }
@@ -57,7 +58,7 @@ export class RemoteSession implements GameSession {
     }
     this.ws = ws;
     ws.onopen = () => {
-      this.send({ t: "join", name: this.opts.name, mode: this.opts.mode ?? "online" });
+      this.send({ t: "join", name: this.opts.name, mode: this.opts.mode ?? "online", lang: this.opts.lang });
       this.pingTimer = setInterval(() => this.send({ t: "ping", ts: Date.now(), rtt: this.lastRtt }), 2000);
     };
     ws.onmessage = (ev) => this.onMessage(String(ev.data));

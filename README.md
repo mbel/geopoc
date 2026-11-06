@@ -1,5 +1,7 @@
 # GeoClash Royale (nom de travail)
 
+> 🌐 **Languages / Langues** : [English](README-en.md) · [Français](README.fr.md)
+
 Battle Royale de culture générale sur la carte du monde. **Jouable en solo ou en ligne** : des bots (signalés comme tels) prennent toutes les places libres.
 
 Ce dépôt est un monorepo TypeScript : moteur de règles, runtime de partie, simulateur d'équilibrage, serveur multijoueur et application web/mobile (PWA, prête à être emballée avec Capacitor pour les stores).

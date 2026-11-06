@@ -3,6 +3,7 @@ import citiesRaw from "../cities.json" with { type: "json" };
 import balanceV0 from "../balance.v0.json" with { type: "json" };
 import balanceV1 from "../balance.v1.json" with { type: "json" };
 import questionsFrRaw from "../questions.fr.json" with { type: "json" };
+import questionsEnRaw from "../questions.en.json" with { type: "json" };
 
 export const cities = citiesFromRaw(citiesRaw as RawCity[]);
 
@@ -19,5 +20,13 @@ export function getWorld(balance: Balance = getBalance()): World {
   return buildWorld(cities, balance.graph);
 }
 
-/** Questions brutes (à valider avec `parseQuestions` du runtime). */
+/** Questions brutes en français (à valider avec `parseQuestions` du runtime). */
 export const questionsFr: unknown = questionsFrRaw;
+
+/** English questions (raw, validate with `parseQuestions`). */
+export const questionsEn: unknown = questionsEnRaw;
+
+/** Language-keyed accessor. */
+export function getQuestionsRaw(lang: "fr" | "en" = "fr"): unknown {
+  return lang === "en" ? questionsEnRaw : questionsFrRaw;
+}

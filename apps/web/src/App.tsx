@@ -14,7 +14,7 @@ import { MemoryStorage, createStorage, type KeyValueStorage } from "./services/s
 type Mode = "solo" | "online";
 
 export default function App() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [storage, setStorage] = useState<KeyValueStorage>(() => new MemoryStorage());
   const [passport, setPassport] = useState<PassportData>(emptyPassport());
   const [screen, setScreen] = useState<"home" | "passport">("home");
@@ -73,7 +73,7 @@ export default function App() {
 
   const start = (m: Mode) => {
     session?.leave();
-    const s = createSession(m, name.trim() || t("home.namePlaceholder"));
+    const s = createSession(m, name.trim() || t("home.namePlaceholder"), locale);
     setMode(m);
     setSession(s);
     s.start();

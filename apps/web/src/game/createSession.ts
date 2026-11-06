@@ -1,4 +1,4 @@
-import { getBalance, getWorld, questionsFr } from "@geoclash/data";
+import { getBalance, getWorld, questionsEn, questionsFr } from "@geoclash/data";
 import {
   LocalSession,
   RemoteSession,
@@ -19,12 +19,20 @@ function content() {
   return cache;
 }
 
-export const questions = parseQuestions(questionsFr);
+export const questionsFrParsed = parseQuestions(questionsFr);
+export const questionsEnParsed = parseQuestions(questionsEn);
+
+export const questions = questionsFrParsed;
 export const onlineAvailable = () => config.serverUrl.length > 0;
 
 /** Solo = moteur dans le navigateur ; en ligne = serveur autoritaire. Même interface dans les deux cas. */
-export function createSession(mode: "solo" | "online", name: string): GameSession {
+export function createSession(
+  mode: "solo" | "online",
+  name: string,
+  lang: "fr" | "en" = "fr",
+): GameSession {
   const { balance, world } = content();
-  if (mode === "solo") return new LocalSession({ world, balance, questions, name });
-  return new RemoteSession({ url: config.serverUrl, name, mode: "online" });
+  const qs = lang === "en" ? questionsEnParsed : questionsFrParsed;
+  if (mode === "solo") return new LocalSession({ world, balance, questions: qs, name });
+  return new RemoteSession({ url: config.serverUrl, name, mode: "online", lang });
 }
